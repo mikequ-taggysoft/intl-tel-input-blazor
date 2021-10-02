@@ -35,34 +35,34 @@ A custom validation attribute is included, see the example below. It is importan
 
 ```html
 <EditForm EditContext="_editContext" OnValidSubmit="OnValidSubmit">
-<DataAnnotationsValidator/>
-<ValidationSummary/>
-
-    <label>Nr. 1:</label>
-    <IntPhoneNumberInput @bind-Value="_model.IntTelNumber"/>
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
     
-    <label>Nr. 2:</label>
-    <IntPhoneNumberInput @bind-Value="_model.IntTelNumber2"/>
+    <label>Tel. 1:</label>
+    <IntlTelInput @bind-Value="_model.IntTelNumber"/>
+    
+    <label>Tel. 2:</label>
+    <IntlTelInput @bind-Value="_model.IntTelNumber2"/>
     <button class="btn-primary">Submit</button>
 </EditForm>
 ```
 ```c#
 @code
 {
-   NumberModel _model = new NumberModel();
-   EditContext _editContext;
-   
-   protected override void OnInitialized()
-   {
-      _editContext = new EditContext(_model);
-   }
-   
-   private void OnValidSubmit()
-   {
-      var tel1 = _model.IntTelNumber.Number;
-      var tel2 = _model.IntTelNumber2.Number;
-      Console.WriteLine($"Number 1: {tel1}; Number 2: {tel2}");
-   }
+	NumberModel _model = new NumberModel();
+    EditContext _editContext;
+
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(_model);
+    }
+
+    private void OnValidSubmit()
+    {
+        var tel1 = _model.IntTelNumber.Number;
+        var tel2 = _model.IntTelNumber2.Number;
+        Console.WriteLine($"Number 1: {tel1}; Number 2: {tel2}");
+    }
 }
 
 public class NumberModel
