@@ -49,7 +49,7 @@ A custom validation attribute is included, see the example below. It is importan
 ```c#
 @code
 {
-	NumberModel _model = new NumberModel();
+    NumberModel _model = new NumberModel();
     EditContext _editContext;
 
     protected override void OnInitialized()
