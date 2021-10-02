@@ -1,7 +1,7 @@
 @inherits InputBase<IntlTel>
 @inject IntlTelInputJsInterop _intlTelInputJsInterop
 
-<input @onchange="OnInput" type="tel" @ref="_telInput"/>
+<input @onblur="OnBlurAsync" type="tel" @ref="_telInput" placeholder="@Placeholder" class="@Class"/>
 
 @code {
 
@@ -13,12 +13,16 @@
 
     [Parameter]
     public string AutoPlaceholder { get; set; } = "polite";
+
+    [Parameter]
+    public string Placeholder { get; set; }
     
     [Parameter]
     public string CustomContainer { get; set; }
     
     [Parameter]
     public IEnumerable<string> ExcludeCountries { get; set; } = Enumerable.Empty<string>();
+    
     [Parameter]
     public bool FormatOnDisplay { get; set; } = true;
     
@@ -39,16 +43,21 @@
     
     [Parameter]
     public IEnumerable<string> PreferredCountries { get; set; } = new[] {"us", "gb"};
-    
+
     [Parameter]
-    public bool SeparateDialCode { get; set; }
-    
+    public bool SeparateDialCode { get; set; } = true;
+
     [Parameter]
     public string UtilsScript { get; set; } = "./_content/IntlTelInputBlazor/js/utils.js";
+   
+    [Parameter]
+    public string Class { get; set; }
 
     ElementReference _telInput;
 
     private int _inputIndex;
+
+    private bool _loaded;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -74,8 +83,10 @@
 
             if (CurrentValue is not null)
             {
-                await _intlTelInputJsInterop.SetNumber(_inputIndex, CurrentValue.Number);
+                CurrentValue = await _intlTelInputJsInterop.SetNumber(_inputIndex, CurrentValue.Number);
             }
+
+            _loaded = true;
         }
     }
     
@@ -84,12 +95,20 @@
         throw new NotImplementedException();
     }
 
-    private async void OnInput(ChangeEventArgs e)
+    /*We want to use OnBlur instead of OnChange because the latter will not triger validation when country is changed from the
+      dropdown box but number remains unchanged. We add a _loaded check to avoid exception during initial page load triggering 
+      this event before the OnAfterRenderAsync completes */
+
+    private async Task OnBlurAsync()
     {
-        CurrentValue = await _intlTelInputJsInterop.GetData(_inputIndex);
-        if (CurrentValue is not null)
+       if (_loaded)
         {
-            await _intlTelInputJsInterop.SetNumber(_inputIndex, CurrentValue.Number);
+            CurrentValue = await _intlTelInputJsInterop.GetData(_inputIndex);
+
+            if (CurrentValue is not null)
+            {
+                CurrentValue = await _intlTelInputJsInterop.SetNumber(_inputIndex, CurrentValue.Number);
+            }
         }
     }
 }

@@ -22,4 +22,6 @@ export function get(id) {
 export function setNumber(id, number) {
     const input = inputs[id];
     input.setNumber(number);
+
+    return get(id);
 }
