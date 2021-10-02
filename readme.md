@@ -67,10 +67,10 @@ A custom validation attribute is included, see the example below. It is importan
 
 public class NumberModel
 {
-   [IntlTelephone(ErrorMessage = "Tel. 1 incorrect format")]
-   public IntlTel IntTelNumber { get; set; }
+    [IntlTelephone(ErrorMessage = "Tel. 1 incorrect format")]
+    public IntlTel IntTelNumber { get; set; }
    
-   [IntlTelephone(ErrorMessage = "Tel. 2 incorrect format")]
-   public IntlTel IntTelNumber2 { get; set; }
+    [IntlTelephone(ErrorMessage = "Tel. 2 incorrect format")]
+    public IntlTel IntTelNumber2 { get; set; }
 }
 ```
